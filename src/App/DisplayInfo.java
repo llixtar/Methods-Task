@@ -8,6 +8,8 @@ public class DisplayInfo {
     private static final int MAC_BOOK = 2;
     private static final int AIR_PODS = 3;
 
+    private static final int QUIT = -1;
+
 
     static String[] products = {"iPhone", "MacBook", "AirPods"};
     static String[] iPhones = {"iPhone SE", "iPhone 13", "iPhone 14", "iPhone 14 Plus", "iPhone 15",
@@ -28,7 +30,7 @@ public class DisplayInfo {
         showCategory();
 
         String dataIn = sc.nextLine().trim();
-        numTypeProd = whatType(dataIn);
+        numTypeProd = detectType(dataIn);
 
         switch (numTypeProd) {
             case IPHONE:
@@ -43,6 +45,9 @@ public class DisplayInfo {
                 showProducts(airPodsPrices, airPods);
                 showEndPrice(airPodsPrices, airPods);
                 break;
+            case QUIT:
+                quitApp();
+                break;
             default:
                 System.out.println("x_x");
                 outInfo();
@@ -50,7 +55,7 @@ public class DisplayInfo {
     }
 
     //----------------------------------------------------------------------------------------------------------------------
-    public static int whatType(String nameProd) {
+    public static int detectType(String nameProd) {
         int num = 0;
         try {
             num = Integer.parseInt(nameProd);
@@ -83,9 +88,11 @@ public class DisplayInfo {
 
     //------------------------------------------------------------------------------------------------------------------
     public static void showEndPrice(double[] prices, String[] names) {
-        System.out.println("\nChoose a model(Enter ONLY number):");
+        System.out.println("\nChoose a model(Enter ONLY number)/ENTER -1 for QUIT:");
 
         String dataIn = sc.nextLine().trim();
+
+
         int num = Integer.parseInt(dataIn);
 
         if (num > 0 && num <= prices.length) {
@@ -97,10 +104,14 @@ public class DisplayInfo {
                             "%s:%nPrice: %.2f%s;%nDiscount: %d%%;%nEnd price: %.2f%s;" +
                             "%n------------------------------%n",
                     names[num - 1], prices[num - 1], CURRENCY, disc, endPrice, CURRENCY);
-        } else
+            outInfo();
+        } else if (num == QUIT)
+            quitApp();
+        else {
             System.out.println("x_x");
+            outInfo();
+        }
 
-        outInfo();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -114,8 +125,13 @@ public class DisplayInfo {
                 System.out.printf("%nProduct category:%n%d)%s", i + 1, products[i]);
             } else if (i < (cntProd - 1)) {
                 System.out.printf("%n%d)%s", i + 1, products[i]);
-            } else System.out.printf("%n%d)%s%n%nEnter the product name or number:", i + 1, products[i]);
+            } else System.out.printf("%n%d)%s%n%nEnter the product name or number/ENTER -1 for QUIT:", i + 1, products[i]);
         }
 
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    public static void quitApp() {
+        System.out.println("Quit the program!");
+        sc.close();
     }
 }
